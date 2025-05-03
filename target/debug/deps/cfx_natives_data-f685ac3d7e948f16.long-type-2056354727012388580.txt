@@ -1,0 +1,1 @@
+Pin<&mut tokio::future::maybe_done::MaybeDone<&impl futures::Future<Output = Result<Vec<GitHubContent>, anyhow::Error>>>>

@@ -1,0 +1,9 @@
+C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-native-data\target\debug\deps\libicu_normalizer-91e6a525d7eb7ba2.rmeta: C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\lib.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\error.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\properties.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\provider.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\uts46.rs
+
+C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-native-data\target\debug\deps\icu_normalizer-91e6a525d7eb7ba2.d: C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\lib.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\error.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\properties.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\provider.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\uts46.rs
+
+C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\lib.rs:
+C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\error.rs:
+C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\properties.rs:
+C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\provider.rs:
+C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\icu_normalizer-1.5.0\src\uts46.rs:
