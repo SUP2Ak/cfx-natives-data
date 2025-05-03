@@ -1,9 +1,0 @@
-C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-natives-data\target\debug\deps\futures_macro-a420f1aa1fc5871d.dll: C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\lib.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\executor.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\join.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\select.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\stream_select.rs
-
-C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-natives-data\target\debug\deps\futures_macro-a420f1aa1fc5871d.d: C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\lib.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\executor.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\join.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\select.rs C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\stream_select.rs
-
-C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\lib.rs:
-C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\executor.rs:
-C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\join.rs:
-C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\select.rs:
-C:\Users\SUP2Ak\.cargo\registry\src\index.crates.io-6f17d22bba15001f\futures-macro-0.3.31\src\stream_select.rs:

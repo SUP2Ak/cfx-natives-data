@@ -1,1 +1,0 @@
-C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-natives-data\target\debug\cfx-natives-data.exe: C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-natives-data\src\lib.rs C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-natives-data\src\main.rs C:\Users\SUP2Ak\Desktop\work-supv\self\fivem\supv_native\cfx-natives-data\src\types.rs
