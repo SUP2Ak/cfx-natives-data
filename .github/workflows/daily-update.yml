@@ -48,6 +48,17 @@ jobs:
       - name: Check for changes
         id: check
         run: |
+          echo "Diff content:"
+          diff -r original_assets assets || true
+          echo "-------------------"
+          
+          echo "Original GTA5:"
+          cat original_assets/natives.gta5.json | head -n 20
+          echo "-------------------"
+          echo "New GTA5:"
+          cat assets/natives.gta5.json | head -n 20
+          echo "-------------------"
+          
           diff -r original_assets assets || echo "changes=true" >> $GITHUB_OUTPUT
 
       - name: Prepare for PR
