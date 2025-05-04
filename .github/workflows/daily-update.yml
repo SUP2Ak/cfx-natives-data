@@ -49,6 +49,15 @@ jobs:
         id: check
         run: |
           diff -r original_assets assets || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Prepare for PR
+        if: steps.check.outputs.changes == 'true'
+        run: |
+          # Ignorer les fichiers temporaires
+          echo "changes.txt" >> .gitignore
+          echo "original_assets/" >> .gitignore
+          echo "fetched/" >> .gitignore
+          echo "target/" >> .gitignore
           
       - name: Create Pull Request
         if: steps.check.outputs.changes == 'true'
