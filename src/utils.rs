@@ -42,12 +42,31 @@ pub fn check_and_update_natives(
     game_type: GamesType,
     metadata: &mut Metadata,
 ) -> anyhow::Result<Vec<ChangeType>> {
+    println!("Checking changes for {:?}", game_type);
+    println!("Old content length: {}", old_content.len());
+    println!("New content length: {}", new_content.len());
+    
     if old_content == new_content {
+        println!("No changes detected (exact match)");
         return Ok(vec![ChangeType::NoChange]);
     }
 
-    let old_natives: OrganizedNatives = serde_json::from_str(old_content).unwrap_or_default();
-    let new_natives: OrganizedNatives = serde_json::from_str(new_content)?;
+    let old_natives: OrganizedNatives = match serde_json::from_str(old_content) {
+        Ok(n) => n,
+        Err(e) => {
+            println!("Error parsing old content: {}", e);
+            return Ok(vec![ChangeType::NoChange]);
+        }
+    };
+    
+    let new_natives: OrganizedNatives = match serde_json::from_str(new_content) {
+        Ok(n) => n,
+        Err(e) => {
+            println!("Error parsing new content: {}", e);
+            return Ok(vec![ChangeType::NoChange]);
+        }
+    };
+
     let mut changes = Vec::new();
 
     fn compare_natives(old_vec: &[Native], new_vec: &[Native], category: &str) -> Vec<ChangeType> {
