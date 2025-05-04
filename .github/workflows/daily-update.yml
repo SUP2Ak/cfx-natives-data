@@ -41,6 +41,9 @@ jobs:
           else
             cargo run --release > changes.txt
           fi
+          echo "CHANGES<<EOF" >> $GITHUB_ENV
+          cat changes.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
           
       - name: Check for changes
         id: check
@@ -56,9 +59,10 @@ jobs:
           title: "${{ inputs.simulate && '🧪 Test - ' || '🤖 ' }}Daily Natives Update"
           body: |
             ## Changements Détectés
+            
             ${{ inputs.simulate && '⚠️ Ceci est une simulation de changements ⚠️\n\n' || '' }}
             ```
-            $(cat changes.txt)
+            ${{ env.CHANGES }}
             ```
             
             Cette PR a été générée automatiquement par le workflow de mise à jour quotidienne.
