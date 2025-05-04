@@ -6,6 +6,7 @@ pub enum GamesType {
     GTA5,
     RDR3,
     CFX,
+    Global,
 }
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
@@ -61,6 +62,10 @@ pub enum NativeVariant {
         gta_hash: String,
         gta_jhash: Option<String>,
     },
+    Global {
+        name: String,
+        // TODO
+    }
 }
 
 // Structure unifiée pour la sortie
@@ -124,4 +129,21 @@ pub struct OrganizedNatives {
     pub client: Vec<Native>,
     pub server: Vec<Native>,
     pub shared: Vec<Native>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Metadata {
+    pub natives_gta5: String,
+    pub natives_rdr3: String,
+    pub global: String,
+}
+
+impl Default for Metadata {
+    fn default() -> Self {
+        Self {
+            natives_gta5: "0.0.0".to_string(),
+            natives_rdr3: "0.0.0".to_string(),
+            global: "0.0.0".to_string(),
+        }
+    }
 }
