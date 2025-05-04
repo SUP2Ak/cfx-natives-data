@@ -46,22 +46,8 @@ pub fn check_and_update_natives(
     println!("Old content length: {}", old_content.len());
     println!("New content length: {}", new_content.len());
 
-    let old_natives: OrganizedNatives = match serde_json::from_str(old_content) {
-        Ok(n) => n,
-        Err(e) => {
-            println!("Error parsing old content: {}", e);
-            return Ok(vec![ChangeType::NoChange]);
-        }
-    };
-    
-    let new_natives: OrganizedNatives = match serde_json::from_str(new_content) {
-        Ok(n) => n,
-        Err(e) => {
-            println!("Error parsing new content: {}", e);
-            return Ok(vec![ChangeType::NoChange]);
-        }
-    };
-
+    let old_natives: OrganizedNatives = serde_json::from_str(old_content).unwrap_or_default();
+    let new_natives: OrganizedNatives = serde_json::from_str(new_content)?;
     let mut changes = Vec::new();
 
     fn compare_natives(old_vec: &[Native], new_vec: &[Native], category: &str) -> Vec<ChangeType> {
@@ -70,87 +56,33 @@ pub fn check_and_update_natives(
         let new_map: HashMap<_, _> = new_vec.iter().map(|n| (&n.name, n)).collect();
 
         for (name, new_native) in new_map.iter() {
-            match old_map.get(name) {
-                Some(old_native) => {
-                    if old_native.namespace != new_native.namespace {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.namespace", category),
-                            old_value: old_native.namespace.clone(),
-                            new_value: new_native.namespace.clone(),
-                        });
-                    }
-                    if old_native.hash != new_native.hash {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.hash", category),
-                            old_value: old_native.hash.clone(),
-                            new_value: new_native.hash.clone(),
-                        });
-                    }
-                    if old_native.description != new_native.description {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.description", category),
-                            old_value: old_native.description.clone(),
-                            new_value: new_native.description.clone(),
-                        });
-                    }
-                    if old_native.apiset != new_native.apiset {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.apiset", category),
-                            old_value: old_native.apiset.clone().unwrap_or_default(),
-                            new_value: new_native.apiset.clone().unwrap_or_default(),
-                        });
-                    }
-                    if old_native.game_support != new_native.game_support {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.game_support", category),
-                            old_value: old_native.game_support.clone(),
-                            new_value: new_native.game_support.clone(),
-                        });
-                    }
-                    if old_native.is_rpc != new_native.is_rpc {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.is_rpc", category),
-                            old_value: old_native.is_rpc.to_string(),
-                            new_value: new_native.is_rpc.to_string(),
-                        });
-                    }
-                    if old_native.cname != new_native.cname {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.cname", category),
-                            old_value: old_native.cname.clone().unwrap_or_default(),
-                            new_value: new_native.cname.clone().unwrap_or_default(),
-                        });
-                    }
-                    if old_native.params.len() != new_native.params.len() {
-                        changes.push(ChangeType::Modified {
-                            name: name.to_string(),
-                            field: format!("{}.params", category),
-                            old_value: format!("{} params", old_native.params.len()),
-                            new_value: format!("{} params", new_native.params.len()),
-                        });
-                    } else {
-                        for (i, (old_param, new_param)) in old_native.params.iter().zip(new_native.params.iter()).enumerate() {
-                            if old_param.type_name != new_param.type_name {
+            if let Some(old_native) = old_map.get(name) {
+                let old_value = serde_json::to_value(old_native).unwrap();
+                let new_value = serde_json::to_value(new_native).unwrap();
+
+                if old_value != new_value {
+                    let old_obj = old_value.as_object().unwrap();
+                    let new_obj = new_value.as_object().unwrap();
+
+                    for (field, new_field_value) in new_obj {
+                        if let Some(old_field_value) = old_obj.get(field) {
+                            if old_field_value != new_field_value {
+                                println!("Field '{}' changed for native '{}':", field, name);
+                                println!("Old: {}", old_field_value);
+                                println!("New: {}", new_field_value);
+                                
                                 changes.push(ChangeType::Modified {
                                     name: name.to_string(),
-                                    field: format!("{}.params[{}]", category, i),
-                                    old_value: format!("{:?}", old_param),
-                                    new_value: format!("{:?}", new_param),
+                                    field: format!("{}.{}", category, field),
+                                    old_value: old_field_value.to_string(),
+                                    new_value: new_field_value.to_string(),
                                 });
                             }
                         }
                     }
                 }
-                None => {
-                    changes.push(ChangeType::Added(format!("{}.{}", category, name)));
-                }
+            } else {
+                changes.push(ChangeType::Added(format!("{}.{}", category, name)));
             }
         }
 
@@ -162,7 +94,6 @@ pub fn check_and_update_natives(
 
         changes
     }
-
 
     changes.extend(compare_natives(&old_natives.client, &new_natives.client, "client"));
     changes.extend(compare_natives(&old_natives.server, &new_natives.server, "server"));
