@@ -1,9 +1,10 @@
 mod types;
+mod utils;
 use reqwest;
+use serde::Deserialize;
 use std::collections::HashMap;
 use std::collections::HashSet;
 use std::time::Instant;
-use serde::Deserialize;
 
 #[derive(Deserialize)]
 struct TreeResponse {
@@ -16,8 +17,11 @@ struct TreeItem {
 }
 
 pub use types::{
-    Example, GamesType, NamespacedNatives, Native, NativeVariant, OrganizedNatives, Parameter,
+    Example, GamesType, Metadata, NamespacedNatives, Native, NativeVariant, OrganizedNatives,
+    Parameter,
 };
+
+pub use utils::{check_and_update_natives, increment_version, load_or_create_metadata, ChangeType};
 
 #[derive(Clone)]
 pub struct NativeParser {
@@ -41,6 +45,7 @@ impl NativeParser {
                 "https://raw.githubusercontent.com/alloc8or/rdr3-nativedb-data/master/natives.json"
             }
             GamesType::CFX => "https://static.cfx.re/natives/natives_cfx.json",
+            _ => "",
         }
     }
 
@@ -52,45 +57,52 @@ impl NativeParser {
     }
 
     fn normalize_name(name: &str) -> String {
-        name.replace("_", "")
-            .replace(" ", "")
-            .to_lowercase()
+        name.replace("_", "").replace(" ", "").to_lowercase()
     }
 
-    fn find_markdown_name<'a>(normalized_name: &str, markdown_names: &'a [String]) -> Option<&'a String> {
-        markdown_names.iter().find(|&md_name| {
-            Self::normalize_name(md_name) == normalized_name
-        })
+    fn find_markdown_name<'a>(
+        normalized_name: &str,
+        markdown_names: &'a [String],
+    ) -> Option<&'a String> {
+        markdown_names
+            .iter()
+            .find(|&md_name| Self::normalize_name(md_name) == normalized_name)
     }
 
-    pub async fn fetch_natives(&self, game_type: GamesType, markdown_names: Vec<String>) -> anyhow::Result<Vec<Native>> {        
+    pub async fn fetch_natives(
+        &self,
+        game_type: GamesType,
+        markdown_names: Vec<String>,
+    ) -> anyhow::Result<Vec<Native>> {
         let url = Self::get_native_url(game_type);
         let response = self.client.get(url).send().await?;
 
         match game_type {
             GamesType::CFX => {
                 let json: serde_json::Value = response.json().await?;
-                let cfx_obj = json.get("CFX")
+                let cfx_obj = json
+                    .get("CFX")
                     .ok_or_else(|| anyhow::anyhow!("Missing CFX object"))?;
 
                 let mut natives = Vec::with_capacity(cfx_obj.as_object().map_or(0, |m| m.len()));
 
                 if let Some(obj) = cfx_obj.as_object() {
                     for (hash, native_value) in obj {
-                        if let Ok(mut native) = serde_json::from_value::<Native>(native_value.clone()) {
+                        if let Ok(mut native) =
+                            serde_json::from_value::<Native>(native_value.clone())
+                        {
                             native.hash = hash.to_string();
-                            
-                            // Sauvegarder le nom original comme cname
                             let original_name = if native.name.is_empty() {
                                 format!("N_{}", hash)
                             } else {
                                 native.name.clone()
                             };
+
                             native.cname = Some(original_name.clone());
-                            
-                            // Chercher le nom correspondant dans les markdown
                             let normalized_name = Self::normalize_name(&original_name);
-                            if let Some(md_name) = Self::find_markdown_name(&normalized_name, &markdown_names) {
+                            if let Some(md_name) =
+                                Self::find_markdown_name(&normalized_name, &markdown_names)
+                            {
                                 native.name = md_name.clone();
                             } else {
                                 native.name = original_name;
@@ -109,20 +121,20 @@ impl NativeParser {
                 let json: HashMap<String, HashMap<String, Native>> =
                     serde_json::from_str(&response.text().await?)?;
                 let mut natives = Vec::new();
-                
+
                 for (namespace, natives_map) in json {
                     for (hash, mut native) in natives_map {
-                        // Sauvegarder le nom original comme cname
                         let original_name = if native.name.is_empty() {
                             format!("N_{}", hash)
                         } else {
                             native.name.clone()
                         };
                         native.cname = Some(original_name.clone());
-                        
-                        // Chercher le nom correspondant dans les markdown
+
                         let normalized_name = Self::normalize_name(&original_name);
-                        if let Some(md_name) = Self::find_markdown_name(&normalized_name, &markdown_names) {
+                        if let Some(md_name) =
+                            Self::find_markdown_name(&normalized_name, &markdown_names)
+                        {
                             native.name = md_name.clone();
                         } else {
                             native.name = original_name;
@@ -133,14 +145,16 @@ impl NativeParser {
                         }
                         native.hash = hash;
                         native.namespace = namespace.clone();
-                        
+
                         match game_type {
                             GamesType::RDR3 => {
-                                native.docs_url = Self::generate_docs_url(GamesType::RDR3, &native.hash);
+                                native.docs_url =
+                                    Self::generate_docs_url(GamesType::RDR3, &native.hash);
                                 native.game_support = "RDR3".to_string();
                             }
                             _ => {
-                                native.docs_url = Self::generate_docs_url(GamesType::GTA5, &native.hash);
+                                native.docs_url =
+                                    Self::generate_docs_url(GamesType::GTA5, &native.hash);
                                 native.game_support = "GTA5".to_string();
                             }
                         }
@@ -152,7 +166,12 @@ impl NativeParser {
         }
     }
 
-    pub async fn save_natives(&self, game_type: GamesType, path: &str, markdown_names: Vec<String>) -> anyhow::Result<usize> {
+    pub async fn save_natives(
+        &self,
+        game_type: GamesType,
+        path: &str,
+        markdown_names: Vec<String>,
+    ) -> anyhow::Result<usize> {
         let start_time = Instant::now();
         let natives = self.fetch_natives(game_type, markdown_names).await?;
         let end_time = Instant::now();
@@ -179,11 +198,48 @@ impl NativeParser {
     // Organize natives by apiset and get if native is rpc or not
     // Save them in different files ( GTA5, RDR3 )
 
-    pub async fn organize_natives_by_apiset(&self) -> anyhow::Result<(usize, usize)> {
+    pub async fn organize_natives_by_apiset(
+        &self,
+        metadata: &mut Metadata,
+    ) -> anyhow::Result<(usize, usize)> {
         let gta5_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.gta5.json")?;
         let rdr3_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.rdr3.json")?;
         let cfx_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.cfx.json")?;
-        std::fs::create_dir_all("organized")?;
+        let old_rdr3 = std::fs::read_to_string("assets/natives.rdr3.json").unwrap_or_default();
+        let mut old_gta5 = std::fs::read_to_string("assets/natives.gta5.json").unwrap_or_default();
+
+        let simulate_change = std::env::args().any(|arg| arg == "--simulate-change");
+        if simulate_change {
+            println!("Simulating changes by adding a test native to GTA5...");
+            if let Ok(mut content) = serde_json::from_str::<OrganizedNatives>(&old_gta5) {
+                let test_native = Native {
+                    name: "TEST_SIMULATED_NATIVE".to_string(),
+                    hash: "0xTEST1234".to_string(),
+                    namespace: "TEST".to_string(),
+                    apiset: Some("client".to_string()),
+                    params: vec![],
+                    return_type: "void".to_string(),
+                    description: "".to_string(),
+                    jhash: Some("0xTEST1234".to_string()),
+                    examples: None,
+                    game_support: "GTA5".to_string(),
+                    docs_url: "https://docs.fivem.net/natives/?_=0xTEST1234".to_string(),
+                    is_rpc: false,
+                    cname: None,
+                };
+                
+                content.client.push(test_native);
+                if let Some(native) = content.client.get_mut(0) {
+                    native.namespace = "TEST_MODIFIED".to_string();
+                }
+
+                if let Some(_) = content.server.get_mut(50) {
+                    content.server.remove(50);
+                }
+                
+                old_gta5 = serde_json::to_string(&content)?;
+            }
+        }
 
         let mut gta5_organized = OrganizedNatives {
             client: gta5_natives,
@@ -243,11 +299,42 @@ impl NativeParser {
             }
         }
 
-        let gta5_file = std::fs::File::create("organized/natives.gta5.json")?;
-        serde_json::to_writer_pretty(gta5_file, &gta5_organized)?;
+        let mut gta5_output = Vec::new();
+        let mut rdr3_output = Vec::new();
+        serde_json::to_writer_pretty(&mut gta5_output, &gta5_organized)?;
+        serde_json::to_writer_pretty(&mut rdr3_output, &rdr3_organized)?;
 
-        let rdr3_file = std::fs::File::create("organized/natives.rdr3.json")?;
-        serde_json::to_writer_pretty(rdr3_file, &rdr3_organized)?;
+        let new_gta5 = String::from_utf8(gta5_output)?;
+        let new_rdr3 = String::from_utf8(rdr3_output)?;
+        let gta5_changes = check_and_update_natives(&old_gta5, &new_gta5, GamesType::GTA5, metadata)?;
+        let rdr3_changes = check_and_update_natives(&old_rdr3, &new_rdr3, GamesType::RDR3, metadata)?;
+
+        for change in &gta5_changes {
+            match change {
+                ChangeType::Added(name) => println!("GTA5: Nouvelle native ajoutée: {}", name),
+                ChangeType::Removed(name) => println!("GTA5: Native supprimée: {}", name),
+                ChangeType::Modified { name, field, old_value, new_value } => {
+                    println!("GTA5: Native '{}' modifiée: {} changé de '{}' à '{}'", 
+                        name, field, old_value, new_value);
+                }
+                ChangeType::NoChange => println!("GTA5: Aucun changement"),
+            }
+        }
+
+        for change in &rdr3_changes {
+            match change {
+                ChangeType::Added(name) => println!("RDR3: Nouvelle native ajoutée: {}", name),
+                ChangeType::Removed(name) => println!("RDR3: Native supprimée: {}", name),
+                ChangeType::Modified { name, field, old_value, new_value } => {
+                    println!("RDR3: Native '{}' modifiée: {} changé de '{}' à '{}'", 
+                        name, field, old_value, new_value);
+                }
+                ChangeType::NoChange => println!("RDR3: Aucun changement"),
+            }
+        }
+
+        std::fs::write("assets/natives.gta5.json", &new_gta5)?;
+        std::fs::write("assets/natives.rdr3.json", &new_rdr3)?;
 
         Ok((
             gta5_organized.client.len() + gta5_organized.server.len() + gta5_organized.shared.len(),
@@ -261,21 +348,32 @@ impl NativeParser {
         Ok(natives)
     }
 
-    pub async fn fetch_markdown_filenames(&self, game_type: GamesType) -> anyhow::Result<Vec<String>> {
+    pub async fn fetch_markdown_filenames(
+        &self,
+        game_type: GamesType,
+    ) -> anyhow::Result<Vec<String>> {
         let api_url = match game_type {
-            GamesType::GTA5 => "https://api.github.com/repos/citizenfx/natives/git/trees/master?recursive=1",
-            GamesType::CFX => "https://api.github.com/repos/citizenfx/fivem/git/trees/master?recursive=1",
-            _ => return Err(anyhow::anyhow!("Unsupported game type for markdown docs"))
+            GamesType::GTA5 => {
+                "https://api.github.com/repos/citizenfx/natives/git/trees/master?recursive=1"
+            }
+            GamesType::CFX => {
+                "https://api.github.com/repos/citizenfx/fivem/git/trees/master?recursive=1"
+            }
+            _ => return Err(anyhow::anyhow!("Unsupported game type for markdown docs")),
         };
 
-        let response = self.client.get(api_url)
+        let response = self
+            .client
+            .get(api_url)
             .header("User-Agent", "request")
             .send()
             .await?
             .json::<TreeResponse>()
             .await?;
 
-        let markdown_files: Vec<String> = response.tree.into_iter()
+        let markdown_files: Vec<String> = response
+            .tree
+            .into_iter()
             .filter_map(|item| {
                 if item.path.ends_with(".md") {
                     if game_type == GamesType::CFX {
