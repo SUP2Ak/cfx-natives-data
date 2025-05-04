@@ -20,6 +20,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
       
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -28,7 +30,6 @@ jobs:
           
       - name: Setup initial files
         run: |
-          # Créer une copie de sauvegarde des fichiers originaux
           mkdir -p original_assets
           cp assets/* original_assets/
           
@@ -44,14 +45,13 @@ jobs:
       - name: Check for changes
         id: check
         run: |
-          # Comparer avec les fichiers originaux
           diff -r original_assets assets || echo "changes=true" >> $GITHUB_OUTPUT
           
       - name: Create Pull Request
         if: steps.check.outputs.changes == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_TOKEN }}
           commit-message: "chore: update natives data"
           title: "${{ inputs.simulate && '🧪 Test - ' || '🤖 ' }}Daily Natives Update"
           body: |
