@@ -69,6 +69,15 @@ impl NativeParser {
             .find(|&md_name| Self::normalize_name(md_name) == normalized_name)
     }
 
+    fn handle_special_cases(hash: &str, name: &str) -> Option<String> {
+        match (hash, name) {
+            ("0x1CA3E9EAC9D93E5E", "SET_TEXT_DROP_SHADOW") => Some("SetTextDropShadow".to_string()),
+            ("0x465C84BC39F1C351", "SET_TEXT_DROPSHADOW") => Some("SetTextDropshadow".to_string()),
+            // Add more special cases if needed
+            _ => None,
+        }
+    }
+
     pub async fn fetch_natives(
         &self,
         game_type: GamesType,
@@ -99,13 +108,17 @@ impl NativeParser {
                             };
 
                             native.cname = Some(original_name.clone());
-                            let normalized_name = Self::normalize_name(&original_name);
-                            if let Some(md_name) =
-                                Self::find_markdown_name(&normalized_name, &markdown_names)
-                            {
-                                native.name = md_name.clone();
+                            if let Some(special_name) = Self::handle_special_cases(&hash, &original_name) {
+                                native.name = special_name;
                             } else {
-                                native.name = original_name;
+                                let normalized_name = Self::normalize_name(&original_name);
+                                if let Some(md_name) =
+                                    Self::find_markdown_name(&normalized_name, &markdown_names)
+                                {
+                                    native.name = md_name.clone();
+                                } else {
+                                    native.name = original_name;
+                                }
                             }
 
                             native.apiset.get_or_insert_with(|| "client".to_string());
@@ -129,15 +142,19 @@ impl NativeParser {
                         } else {
                             native.name.clone()
                         };
-                        native.cname = Some(original_name.clone());
 
-                        let normalized_name = Self::normalize_name(&original_name);
-                        if let Some(md_name) =
-                            Self::find_markdown_name(&normalized_name, &markdown_names)
-                        {
-                            native.name = md_name.clone();
+                        native.cname = Some(original_name.clone());
+                        if let Some(special_name) = Self::handle_special_cases(&hash, &original_name) {
+                            native.name = special_name;
                         } else {
-                            native.name = original_name;
+                            let normalized_name = Self::normalize_name(&original_name);
+                            if let Some(md_name) =
+                                Self::find_markdown_name(&normalized_name, &markdown_names)
+                            {
+                                native.name = md_name.clone();
+                            } else {
+                                native.name = original_name;
+                            }
                         }
 
                         if native.apiset.is_none() {
