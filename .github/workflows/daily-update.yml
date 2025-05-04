@@ -26,6 +26,11 @@ jobs:
         with:
           toolchain: stable
           
+      - name: Setup initial files
+        run: |
+          mkdir -p assets
+          cp -r $GITHUB_WORKSPACE/assets/* assets/
+          
       - name: Build and Run
         id: run
         run: |
