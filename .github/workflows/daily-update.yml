@@ -1,0 +1,70 @@
+name: Daily Native Updates
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # midnight
+  workflow_dispatch:      # manually
+    inputs:
+      simulate:
+        description: 'Simuler des changements'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  update-natives:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          
+      - name: Build and Run
+        id: run
+        run: |
+          if [[ "${{ inputs.simulate }}" == "true" ]]; then
+            cargo run --release -- --simulate-change > changes.txt
+          else
+            cargo run --release > changes.txt
+          fi
+          
+      - name: Check for changes
+        id: check
+        run: |
+          git diff --quiet assets/ || echo "changes=true" >> $GITHUB_OUTPUT
+          
+      - name: Create Pull Request
+        if: steps.check.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update natives data"
+          title: "${{ inputs.simulate && '🧪 Test - ' || '🤖 ' }}Daily Natives Update"
+          body: |
+            ## Changements Détectés
+            ${{ inputs.simulate && '⚠️ Ceci est une simulation de changements ⚠️\n\n' || '' }}
+            ```
+            $(cat changes.txt)
+            ```
+            
+            Cette PR a été générée automatiquement par le workflow de mise à jour quotidienne.
+          branch: update/natives-data
+          base: main
+          delete-branch: true
+          labels: |
+            automated pr
+            natives update
+            ${{ inputs.simulate && 'simulation' || '' }}
+
+      - name: Check PR Status
+        if: steps.check.outputs.changes == 'true'
+        run: |
+          echo "Pull Request créée avec succès"
+          echo "Les changements ont été détectés et documentés dans la PR" 
