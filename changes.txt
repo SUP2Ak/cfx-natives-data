@@ -1,0 +1,17 @@
+Starting...
+[CFX] Time taken to fetch natives: 1.31399073s | 849 natives fetched
+[CFX] Time taken to save natives: 185.95645ms | 849 natives saved
+[GTA5] Time taken to fetch natives: 4.170176218s | 6434 natives fetched
+[GTA5] Time taken to save natives: 1.362839153s | 6434 natives saved
+[RDR3] Time taken to fetch natives: 7.538775166s | 7132 natives fetched
+[RDR3] Time taken to save natives: 1.460837358s | 7132 natives saved
+Checking changes for GTA5
+Old content length: 5335623
+New content length: 5335619
+Checking changes for RDR3
+Old content length: 5174487
+New content length: 5174487
+No changes detected (exact match)
+GTA5: Aucun changement
+RDR3: Aucun changement
+Natives organized successfully! 15264 Total natives organized | 7283 Natives GTA5 | 7981 Natives RDR3
