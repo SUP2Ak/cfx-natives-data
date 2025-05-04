@@ -67,6 +67,7 @@ pub enum NativeVariant {
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 #[serde(default)]
 pub struct Native {
+    pub cname: Option<String>,
     pub name: String,
     pub params: Vec<Parameter>,
     #[serde(alias = "results", alias = "return_type")]
