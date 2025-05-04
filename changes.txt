@@ -1,0 +1,18 @@
+Starting...
+[CFX] Time taken to fetch natives: 1.880922403s | 849 natives fetched
+[CFX] Time taken to save natives: 236.026686ms | 849 natives saved
+[GTA5] Time taken to fetch natives: 4.224040397s | 6434 natives fetched
+[GTA5] Time taken to save natives: 1.368059507s | 6434 natives saved
+[RDR3] Time taken to fetch natives: 6.594494618s | 7132 natives fetched
+[RDR3] Time taken to save natives: 1.456659038s | 7132 natives saved
+Simulating changes by adding a test native to GTA5...
+GTA5: Native 'AppClearBlock' modifiée: client.namespace changé de 'TEST_MODIFIED' à 'APP'
+GTA5: Native 'SetTextDropshadow' modifiée: client.hash changé de '0x1CA3E9EAC9D93E5E' à '0x465C84BC39F1C351'
+GTA5: Native 'SetTextDropshadow' modifiée: client.description changé de '' à 'distance - shadow distance in pixels, both horizontal and vertical
+r, g, b, a - color'
+GTA5: Native 'SetTextDropshadow' modifiée: client.cname changé de 'SET_TEXT_DROP_SHADOW' à 'SET_TEXT_DROPSHADOW'
+GTA5: Native 'SetTextDropshadow' modifiée: client.params changé de '0 params' à '5 params'
+GTA5: Native supprimée: client.TEST_SIMULATED_NATIVE
+GTA5: Nouvelle native ajoutée: server.GetEntitySpeed
+RDR3: Aucun changement
+Natives organized successfully! 15264 Total natives organized | 7283 Natives GTA5 | 7981 Natives RDR3
