@@ -1,3 +1,6 @@
 /target/
 /node_modules/
-test.lua
+test.luachanges.txt
+original_assets/
+fetched/
+target/
