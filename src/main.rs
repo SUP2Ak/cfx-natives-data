@@ -1,20 +1,20 @@
-use cfx_natives_data::{GamesType, NativeParser};
-use std::sync::atomic::{AtomicUsize, Ordering};
+use cfx_natives_data::{GamesType, NativeParser, load_or_create_metadata};
+use serde_json;
 use std::sync::Arc;
-use std::time::Instant;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    println!("Starting...");
     std::fs::create_dir_all("fetched")?;
+    std::fs::create_dir_all("assets")?;
     let parser = NativeParser::new();
+    let mut metadata = load_or_create_metadata().await?;
     let natives_count = Arc::new(AtomicUsize::new(0));
-    let start_time_docs = Instant::now();
     let gta5_docs = parser.fetch_markdown_filenames(GamesType::GTA5).await?;
     let cfx_docs = parser.fetch_markdown_filenames(GamesType::CFX).await?;
     let docs_join = [gta5_docs, cfx_docs].concat();
-    println!("Time taken to fetch docs: {:?} | {} Total docs fetched", start_time_docs.elapsed(), docs_join.len());
-    
-    let start_time = Instant::now();
+
     let handles = vec![
         {
             let parser = parser.clone();
@@ -45,6 +45,7 @@ async fn main() -> anyhow::Result<()> {
         {
             let parser = parser.clone();
             let count = natives_count.clone();
+            let docs_join = docs_join.clone();
             tokio::spawn(async move {
                 if let Ok(n) = parser
                     .save_natives(GamesType::CFX, "fetched/natives.cfx.json", docs_join)
@@ -55,27 +56,22 @@ async fn main() -> anyhow::Result<()> {
             })
         },
     ];
-    
+
     for handle in handles {
         handle.await?;
     }
 
-    let total_count = natives_count.load(Ordering::SeqCst);
+    
+    let (gta5_count, rdr3_count) = parser.organize_natives_by_apiset(&mut metadata).await?;
     println!(
-        "Natives fetched successfully! Time taken: {:?} | {} Total natives fetched",
-        start_time.elapsed(),
-        total_count
-    );
-
-    let start_time = Instant::now();
-    let (gta5_count, rdr3_count) = parser.organize_natives_by_apiset().await?;
-    println!(
-        "Natives organized successfully! Time taken: {:?} | {} Total natives organized | {} Natives GTA5 | {} Natives RDR3",
-        start_time.elapsed(),
+        "Natives organized successfully! {} Total natives organized | {} Natives GTA5 | {} Natives RDR3",
         gta5_count + rdr3_count,
         gta5_count,
         rdr3_count
     );
+
+    let metadata_file = std::fs::File::create("assets/metadata.json")?;
+    serde_json::to_writer_pretty(metadata_file, &metadata)?;
 
     Ok(())
 }
