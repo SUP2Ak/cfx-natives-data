@@ -1,0 +1,44 @@
+Starting...
+[CFX] Time taken to fetch natives: 1.818124538s | 849 natives fetched
+[CFX] Time taken to save natives: 237.632692ms | 849 natives saved
+[GTA5] Time taken to fetch natives: 3.915420235s | 6434 natives fetched
+[GTA5] Time taken to save natives: 1.384766513s | 6434 natives saved
+[RDR3] Time taken to fetch natives: 6.852812122s | 7132 natives fetched
+[RDR3] Time taken to save natives: 1.469501248s | 7132 natives saved
+Checking changes for GTA5
+Old content length: 5335623
+New content length: 5335619
+Field 'return_type' changed for native 'AppClearBlock':
+Old: "zoulette"
+New: "void"
+Field 'cname' changed for native 'SetTextDropshadow':
+Old: "SET_TEXT_DROP_SHADOW"
+New: "SET_TEXT_DROPSHADOW"
+Field 'description' changed for native 'SetTextDropshadow':
+Old: ""
+New: "distance - shadow distance in pixels, both horizontal and vertical\nr, g, b, a - color"
+Field 'docs_url' changed for native 'SetTextDropshadow':
+Old: "https://docs.fivem.net/natives/?_0x1CA3E9EAC9D93E5E"
+New: "https://docs.fivem.net/natives/?_0x465C84BC39F1C351"
+Field 'hash' changed for native 'SetTextDropshadow':
+Old: "0x1CA3E9EAC9D93E5E"
+New: "0x465C84BC39F1C351"
+Field 'jhash' changed for native 'SetTextDropshadow':
+Old: "0xE2A11511"
+New: "0xE6587517"
+Field 'params' changed for native 'SetTextDropshadow':
+Old: []
+New: [{"name":"distance","type":"int"},{"name":"r","type":"int"},{"name":"g","type":"int"},{"name":"b","type":"int"},{"name":"a","type":"int"}]
+Checking changes for RDR3
+Old content length: 5174487
+New content length: 5174487
+GTA5: Native 'AppClearBlock' modifiée: client.return_type changé de '"zoulette"' à '"void"'
+GTA5: Nouvelle native ajoutée: client.SetTextDropShadow
+GTA5: Native 'SetTextDropshadow' modifiée: client.cname changé de '"SET_TEXT_DROP_SHADOW"' à '"SET_TEXT_DROPSHADOW"'
+GTA5: Native 'SetTextDropshadow' modifiée: client.description changé de '""' à '"distance - shadow distance in pixels, both horizontal and vertical\nr, g, b, a - color"'
+GTA5: Native 'SetTextDropshadow' modifiée: client.docs_url changé de '"https://docs.fivem.net/natives/?_0x1CA3E9EAC9D93E5E"' à '"https://docs.fivem.net/natives/?_0x465C84BC39F1C351"'
+GTA5: Native 'SetTextDropshadow' modifiée: client.hash changé de '"0x1CA3E9EAC9D93E5E"' à '"0x465C84BC39F1C351"'
+GTA5: Native 'SetTextDropshadow' modifiée: client.jhash changé de '"0xE2A11511"' à '"0xE6587517"'
+GTA5: Native 'SetTextDropshadow' modifiée: client.params changé de '[]' à '[{"name":"distance","type":"int"},{"name":"r","type":"int"},{"name":"g","type":"int"},{"name":"b","type":"int"},{"name":"a","type":"int"}]'
+RDR3: Aucun changement
+Natives organized successfully! 15264 Total natives organized | 7283 Natives GTA5 | 7981 Natives RDR3
