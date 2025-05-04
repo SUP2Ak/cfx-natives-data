@@ -28,8 +28,9 @@ jobs:
           
       - name: Setup initial files
         run: |
-          mkdir -p assets
-          cp -r $GITHUB_WORKSPACE/assets/* assets/
+          # Créer une copie de sauvegarde des fichiers originaux
+          mkdir -p original_assets
+          cp assets/* original_assets/
           
       - name: Build and Run
         id: run
@@ -43,7 +44,8 @@ jobs:
       - name: Check for changes
         id: check
         run: |
-          git diff --quiet assets/ || echo "changes=true" >> $GITHUB_OUTPUT
+          # Comparer avec les fichiers originaux
+          diff -r original_assets assets || echo "changes=true" >> $GITHUB_OUTPUT
           
       - name: Create Pull Request
         if: steps.check.outputs.changes == 'true'
