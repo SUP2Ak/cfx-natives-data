@@ -45,11 +45,6 @@ pub fn check_and_update_natives(
     println!("Checking changes for {:?}", game_type);
     println!("Old content length: {}", old_content.len());
     println!("New content length: {}", new_content.len());
-    
-    if old_content == new_content {
-        println!("No changes detected (exact match)");
-        return Ok(vec![ChangeType::NoChange]);
-    }
 
     let old_natives: OrganizedNatives = match serde_json::from_str(old_content) {
         Ok(n) => n,
