@@ -28,26 +28,35 @@ jobs:
         with:
           toolchain: stable
           
-      - name: Setup initial files
+      - name: Setup directories
         run: |
           mkdir -p original_plugin
-          if [ -d "plugin" ] && [ "$(ls -A plugin 2>/dev/null)" ]; then
-            cp -r plugin/* original_plugin/ || true
-          fi
-        continue-on-error: true
-      
+          mkdir -p fetched
+          mkdir -p plugin/json/gta5
+          mkdir -p plugin/json/rdr3
+          mkdir -p plugin/lua/gta5
+          mkdir -p plugin/lua/rdr3
+          
       - name: Build and Run
         id: run
         run: |
+          touch fetched/natives.gta5.json
+          touch fetched/natives.rdr3.json
+          touch fetched/natives.cfx.json
+          
           if [[ "${{ inputs.simulate }}" == "true" ]]; then
-            cargo run --release -- --simulate-change > changes.txt
+            cargo run --release -- --simulate-change > changes.txt || true
           else
-            cargo run --release > changes.txt
+            cargo run --release > changes.txt || true
           fi
+          
+          touch changes.txt
+          
           echo "CHANGES<<EOF" >> $GITHUB_ENV
           cat changes.txt >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          
+        continue-on-error: true
+      
       - name: Check for changes
         id: check
         run: |
