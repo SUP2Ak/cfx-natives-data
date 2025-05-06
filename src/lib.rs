@@ -1,8 +1,10 @@
 // mod ts_generator;
 // mod csharp_generator;
 mod lua_generator;
+mod enricher;
 mod types;
 mod utils;
+use enricher::NativeEnricher;
 use reqwest;
 use serde::Deserialize;
 use std::{
@@ -38,9 +40,6 @@ impl NativeParser {
             client: reqwest::Client::new(),
         }
     }
-
-    // First step:
-    // Get natives from url, parse them to save them in json file ( GTA5, RDR3, CFX )
 
     fn get_native_url(game_type: GamesType) -> &'static str {
         match game_type {
@@ -79,6 +78,49 @@ impl NativeParser {
             ("0x465C84BC39F1C351", "SET_TEXT_DROPSHADOW") => Some("SetTextDropshadow".to_string()),
             // Add more special cases if needed
             _ => None,
+        }
+    }
+
+    fn clean_urls_in_description(description: &mut String) {
+        let desc = description.clone();
+        
+        let mut last_end = 0;
+        let mut new_description = String::new();
+        
+        while let Some(start) = desc[last_end..].find("](") {
+            let start = start + last_end;
+            if let Some(end) = desc[start..].find(")") {
+                let end = start + end;
+                
+                new_description.push_str(&desc[last_end..start + 2]);
+                
+                let mut url = desc[start + 2..end].to_string();
+                
+                if url.ends_with('/') {
+                    url.pop();
+                }
+                
+                new_description.push_str(&url);
+                new_description.push(')');
+                
+                last_end = end + 1;
+            } else {
+                break;
+            }
+        }
+        
+        if last_end < desc.len() {
+            new_description.push_str(&desc[last_end..]);
+        }
+        
+        *description = new_description;
+    }
+
+    fn process_native(native: &mut Native) {
+        Self::clean_urls_in_description(&mut native.description);
+        
+        if native.docs_url.ends_with('/') {
+            native.docs_url.pop();
         }
     }
 
@@ -130,6 +172,7 @@ impl NativeParser {
                             native.apiset.get_or_insert_with(|| "client".to_string());
                             native.game_support = "GTA5 | RDR3".to_string();
                             native.docs_url = Self::generate_docs_url(GamesType::CFX, hash);
+                            Self::process_native(&mut native);
                             natives.push(native);
                         }
                     }
@@ -183,6 +226,7 @@ impl NativeParser {
                                 native.game_support = "GTA5".to_string();
                             }
                         }
+                        Self::process_native(&mut native);
                         natives.push(native);
                     }
                 }
@@ -219,25 +263,31 @@ impl NativeParser {
         Ok(natives.len())
     }
 
-    // Second step:
-    // Organize natives by apiset and get if native is rpc or not
-    // Save them in different files ( GTA5, RDR3 )
-
     pub async fn organize_natives_by_apiset(
         &self,
         metadata: &mut Metadata,
     ) -> anyhow::Result<(usize, usize)> {
-        let gta5_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.gta5.json")?;
-        let rdr3_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.rdr3.json")?;
-        let cfx_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.cfx.json")?;
-        let old_rdr3 = std::fs::read_to_string("assets/natives.rdr3.json").unwrap_or_default();
-        let mut old_gta5 = std::fs::read_to_string("assets/natives.gta5.json").unwrap_or_default();
+        let mut gta5_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.gta5.json")?;
+        let mut rdr3_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.rdr3.json")?;
+        let mut cfx_natives: Vec<Native> = self.load_natives_from_file("fetched/natives.cfx.json")?;
+        for native in gta5_natives.iter_mut() {
+            native.enrich();
+        }
+        for native in rdr3_natives.iter_mut() {
+            native.enrich();
+        }
+        for native in cfx_natives.iter_mut() {
+            native.enrich();
+        }
 
+        let mut old_gta5 = std::fs::read_to_string("plugin/json/gta5/natives.json").unwrap_or_default();
+        let old_rdr3 = std::fs::read_to_string("plugin/json/rdr3/natives.json").unwrap_or_default();
         let simulate_change = std::env::args().any(|arg| arg == "--simulate-change");
         if simulate_change {
             println!("Simulating changes by adding a test native to GTA5...");
             if let Ok(mut content) = serde_json::from_str::<OrganizedNatives>(&old_gta5) {
                 let test_native = Native {
+                    language_specifics: None,
                     name: "TEST_SIMULATED_NATIVE".to_string(),
                     hash: "0xTEST1234".to_string(),
                     namespace: "TEST".to_string(),
@@ -374,8 +424,8 @@ impl NativeParser {
             }
         }
 
-        std::fs::write("assets/natives.gta5.json", &new_gta5)?;
-        std::fs::write("assets/natives.rdr3.json", &new_rdr3)?;
+        std::fs::write("plugin/json/gta5/natives.json", &new_gta5)?;
+        std::fs::write("plugin/json/rdr3/natives.json", &new_rdr3)?;
 
         let lua_generator = lua_generator::LuaDocGenerator::new();
         println!("Génération de la documentation Lua pour GTA5...");
