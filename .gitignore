@@ -1,6 +1,15 @@
 /target/
 /node_modules/
-test.luachanges.txt
+changes.txt
 original_assets/
 fetched/
 target/
+assets/
+plugin/
+
+
+# Current working files but maybe not needed...
+src/ts_generator.rs
+src/csharp_generator.rs
+/ts-docs
+/csharp-docs
