@@ -26,7 +26,6 @@ pub struct Example {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum NativeVariant {
-    // Format CFX
     Cfx {
         name: String,
         params: Vec<Parameter>,
@@ -39,7 +38,6 @@ pub enum NativeVariant {
         namespace: String,
         apiset: String,
     },
-    // Format GTA5
     Gta5 {
         name: String,
         params: Vec<Parameter>,
@@ -52,7 +50,6 @@ pub enum NativeVariant {
         namespace: String,
         jhash: Option<String>,
     },
-    // Format RDR3
     Rdr3 {
         name: String,
         comment: String,
@@ -68,7 +65,6 @@ pub enum NativeVariant {
     }
 }
 
-// Structure unifiée pour la sortie
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
 #[serde(default)]
 pub struct Native {
@@ -91,6 +87,8 @@ pub struct Native {
     pub game_support: String,
     #[serde(default = "default_is_rpc")]
     pub is_rpc: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_specifics: Option<HashMap<String, LanguageSpecific>>,
 }
 
 fn default_game_support() -> String {
@@ -146,4 +144,32 @@ impl Default for Metadata {
             global: "0.0.0".to_string(),
         }
     }
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct ReturnInfo {
+    pub name: Option<String>,
+    pub type_name: String,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct LanguageSpecific {
+    pub params: Vec<EnrichedParameter>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub returns: Option<Vec<ReturnInfo>>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct EnrichedParameter {
+    pub name: String,
+    pub param_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modifier: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct ReturnValue {
+    pub return_type: String,
 }
