@@ -42,7 +42,7 @@ impl LuaDocGenerator {
             "string" | "char" => "string".to_string(),
             "boolean" | "bool" => "boolean".to_string(),
             "any" => "unknown".to_string(),
-            "vehicle" | "ped" | "entity" | "hash" | "player" | "cam" => "integer".to_string(),
+            "vehicle" | "ped" | "entity" | "hash" | "player" | "cam" | "blip" => "integer".to_string(),
             "object" => "table".to_string(),
             "vector3" => "vector3".to_string(),
             _ => base_type.to_string(), 
@@ -102,42 +102,79 @@ impl LuaDocGenerator {
         if Self::is_output_parameter(&param.type_name) {
             None
         } else {
-            Some(format!(
+            let mut doc = Vec::new();
+            
+            if param.type_name.to_lowercase().contains("float") {
+                doc.push("---@diagnostic disable-next-line: undefined-doc-name".to_string());
+            }
+            
+            doc.push(format!(
                 "---@param {} {}",
                 Self::format_param_name(&param.name),
                 Self::format_type(&param.type_name)
-            ))
+            ));
+            
+            Some(doc.join("\n"))
         }
     }
 
     fn generate_return_type_doc(native: &Native) -> Vec<String> {
-        let mut returns = Vec::new();
+        let mut return_parts = Vec::new();
+        let mut doc = Vec::new();
+        
         if native.return_type.to_lowercase() != "void" {
-            returns.push(Self::format_type(&native.return_type));
+            return_parts.push(format!("{}", Self::format_type(&native.return_type)));
         }
         
         if let Some(params) = &native.params {
             for param in params {
                 if Self::is_output_parameter(&param.type_name) {
-                    returns.push(Self::format_type(&param.type_name));
+                    return_parts.push(format!("{} {}", 
+                        Self::format_type(&param.type_name),
+                        Self::format_param_name(&param.name)
+                    ));
                 }
             }
         }
         
-        if returns.is_empty() {
-            Vec::new()
-        } else {
-            vec![format!("---@return {}", returns.join(", "))]
+        if !return_parts.is_empty() {
+            let has_float = return_parts.iter().any(|part| part.contains("float"));
+            if has_float {
+                doc.push("---@diagnostic disable-next-line: undefined-doc-name".to_string());
+            }
+            doc.push(format!("---@return {}", return_parts.join(", ")));
         }
+        
+        doc
     }
     
+    fn process_description_line(line: &str) -> String {
+        if line.contains("](") {
+            if let Some(start) = line.find("](") {
+                if let Some(end) = line[start..].find(")") {
+                    let mut processed_line = line.to_string();
+                    let url_end = start + end + 1;
+                    
+                    if processed_line[start..url_end-1].ends_with('/') {
+                        processed_line.remove(url_end-2);
+                    }
+                    
+                    processed_line.insert_str(url_end, "<br>");
+                    return format!("--- {}", processed_line);
+                }
+            }
+        }
+        format!("--- {}", line)
+    }
+
     fn generate_native_doc(&self, native: &Native, api_set: &str) -> String {
         let mut doc = Vec::new();
-        let mut header = format!("---**`{}`", native.namespace);
+        let mut header_elements = vec![native.namespace.clone()];
         if native.is_rpc {
-            header.push_str(" `RPC`");
+            header_elements.push("RPC".to_string());
         }
-        header.push_str(&format!(" `{}`**<br>", api_set));
+        header_elements.push(api_set.to_string());
+        let header = format!("---**`{}`**<br>", header_elements.join("` | `"));
         doc.push(header);
         doc.push(format!(
             "--- [Native Documentation]({})<br>",
@@ -148,7 +185,7 @@ impl LuaDocGenerator {
             for line in native.description.lines() {
                 let trimmed = line.trim();
                 if !trimmed.is_empty() {
-                    doc.push(format!("--- {}", trimmed));
+                    doc.push(Self::process_description_line(trimmed));
                 }
             }
         }
