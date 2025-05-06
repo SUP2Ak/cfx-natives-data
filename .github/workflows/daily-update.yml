@@ -31,8 +31,11 @@ jobs:
       - name: Setup initial files
         run: |
           mkdir -p original_plugin
-          cp -r plugin/* original_plugin/
-          
+          if [ -d "plugin" ] && [ "$(ls -A plugin 2>/dev/null)" ]; then
+            cp -r plugin/* original_plugin/ || true
+          fi
+        continue-on-error: true
+      
       - name: Build and Run
         id: run
         run: |
@@ -49,30 +52,29 @@ jobs:
         id: check
         run: |
           echo "Diff content:"
-          diff -r original_plugin plugin || true
+          if [ -d "plugin" ] && [ -d "original_plugin" ]; then
+            diff -r original_plugin plugin || true
+          fi
           echo "-------------------"
           
-          echo "Original GTA5:"
-          cat original_plugin/json/gta5/natives.json | head -n 20
-          echo "-------------------"
-          echo "New GTA5:"
-          cat plugin/json/gta5/natives.json | head -n 20
-          echo "-------------------"
-          
-          echo "Original RDR3:"
-          cat original_plugin/json/rdr3/natives.json | head -n 20
-          echo "-------------------"
-          echo "New RDR3:"
-          cat plugin/json/rdr3/natives.json | head -n 20
+          if [ -f "original_plugin/json/gta5/natives.json" ]; then
+            echo "Original GTA5:"
+            cat original_plugin/json/gta5/natives.json | head -n 20
+          else
+            echo "Original GTA5 file not found (first run)"
+          fi
           echo "-------------------"
           
-          # Vérifier les différences pour les deux jeux
-          diff -r original_plugin/json/gta5 plugin/json/gta5 || true
-          diff -r original_plugin/json/rdr3 plugin/json/rdr3 || true
+          if [ -f "plugin/json/gta5/natives.json" ]; then
+            echo "New GTA5:"
+            cat plugin/json/gta5/natives.json | head -n 20
+          else
+            echo "New GTA5 file not found yet"
+          fi
+          echo "-------------------"
           
-          # Si l'un des deux a des différences, marquer comme changé
-          if ! diff -r original_plugin/json/gta5 plugin/json/gta5 > /dev/null 2>&1 || \
-             ! diff -r original_plugin/json/rdr3 plugin/json/rdr3 > /dev/null 2>&1; then
+          if [ ! -d "original_plugin" ] || [ ! -d "plugin" ] || \
+             ! diff -r original_plugin plugin > /dev/null 2>&1; then
             echo "changes=true" >> $GITHUB_OUTPUT
           fi
 
