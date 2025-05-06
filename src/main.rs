@@ -8,6 +8,10 @@ async fn main() -> anyhow::Result<()> {
     std::fs::create_dir_all("fetched")?;
     std::fs::create_dir_all("plugin")?;
     std::fs::create_dir_all("plugin/json")?;
+    std::fs::create_dir_all("plugin/json/gta5")?;
+    std::fs::create_dir_all("plugin/json/rdr3")?;
+    std::fs::create_dir_all("plugin/lua/gta5")?;
+    std::fs::create_dir_all("plugin/lua/rdr3")?;
 
     let parser = NativeParser::new();
     let mut metadata = load_or_create_metadata().await?;
