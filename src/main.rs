@@ -6,7 +6,9 @@ use serde_json;
 async fn main() -> anyhow::Result<()> {
     println!("Starting...");
     std::fs::create_dir_all("fetched")?;
-    std::fs::create_dir_all("assets")?;
+    std::fs::create_dir_all("plugin")?;
+    std::fs::create_dir_all("plugin/json")?;
+
     let parser = NativeParser::new();
     let mut metadata = load_or_create_metadata().await?;
     let natives_count = Arc::new(AtomicUsize::new(0));
@@ -69,7 +71,7 @@ async fn main() -> anyhow::Result<()> {
         rdr3_count
     );
 
-    let metadata_file = std::fs::File::create("assets/metadata.json")?;
+    let metadata_file = std::fs::File::create("plugin/metadata.json")?;
     serde_json::to_writer_pretty(metadata_file, &metadata)?;
 
     Ok(())
