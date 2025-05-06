@@ -1,7 +1,6 @@
 use cfx_natives_data::{GamesType, NativeParser, load_or_create_metadata};
+use std::sync::{Arc, atomic::{AtomicUsize, Ordering}};
 use serde_json;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicUsize, Ordering};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
