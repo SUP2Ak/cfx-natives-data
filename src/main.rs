@@ -1,13 +1,18 @@
 use cfx_natives_data::{GamesType, NativeParser, load_or_create_metadata};
+use std::sync::{Arc, atomic::{AtomicUsize, Ordering}};
 use serde_json;
-use std::sync::Arc;
-use std::sync::atomic::{AtomicUsize, Ordering};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     println!("Starting...");
     std::fs::create_dir_all("fetched")?;
-    std::fs::create_dir_all("assets")?;
+    std::fs::create_dir_all("plugin")?;
+    std::fs::create_dir_all("plugin/json")?;
+    std::fs::create_dir_all("plugin/json/gta5")?;
+    std::fs::create_dir_all("plugin/json/rdr3")?;
+    std::fs::create_dir_all("plugin/lua/gta5")?;
+    std::fs::create_dir_all("plugin/lua/rdr3")?;
+
     let parser = NativeParser::new();
     let mut metadata = load_or_create_metadata().await?;
     let natives_count = Arc::new(AtomicUsize::new(0));
@@ -70,7 +75,7 @@ async fn main() -> anyhow::Result<()> {
         rdr3_count
     );
 
-    let metadata_file = std::fs::File::create("assets/metadata.json")?;
+    let metadata_file = std::fs::File::create("plugin/metadata.json")?;
     serde_json::to_writer_pretty(metadata_file, &metadata)?;
 
     Ok(())

@@ -3,7 +3,7 @@ use std::path::Path;
 use std::collections::HashMap;
 
 pub async fn load_or_create_metadata() -> anyhow::Result<Metadata> {
-    let path = Path::new("assets/metadata.json");
+    let path = Path::new("plugin/metadata.json");
     if path.exists() {
         let content = std::fs::read_to_string(path)?;
         Ok(serde_json::from_str(&content)?)
