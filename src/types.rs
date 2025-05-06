@@ -74,7 +74,7 @@ pub enum NativeVariant {
 pub struct Native {
     pub cname: Option<String>,
     pub name: String,
-    pub params: Vec<Parameter>,
+    pub params: Option<Vec<Parameter>>,
     #[serde(alias = "results", alias = "return_type")]
     pub return_type: String,
     #[serde(alias = "comment")]
