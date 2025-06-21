@@ -1,44 +1,59 @@
 Starting...
-[CFX] Time taken to fetch natives: 1.818124538s | 849 natives fetched
-[CFX] Time taken to save natives: 237.632692ms | 849 natives saved
-[GTA5] Time taken to fetch natives: 3.915420235s | 6434 natives fetched
-[GTA5] Time taken to save natives: 1.384766513s | 6434 natives saved
-[RDR3] Time taken to fetch natives: 6.852812122s | 7132 natives fetched
-[RDR3] Time taken to save natives: 1.469501248s | 7132 natives saved
+[CFX] Time taken to fetch natives: 822.738565ms | 849 natives fetched
+[CFX] Time taken to save natives: 214.748494ms | 849 natives saved
+[GTA5] Time taken to fetch natives: 3.492796776s | 6434 natives fetched
+[GTA5] Time taken to save natives: 1.280405205s | 6434 natives saved
+[RDR3] Time taken to fetch natives: 6.627015522s | 7132 natives fetched
+[RDR3] Time taken to save natives: 1.366841169s | 7132 natives saved
 Checking changes for GTA5
-Old content length: 5335623
-New content length: 5335619
-Field 'return_type' changed for native 'AppClearBlock':
-Old: "zoulette"
-New: "void"
-Field 'cname' changed for native 'SetTextDropshadow':
-Old: "SET_TEXT_DROP_SHADOW"
-New: "SET_TEXT_DROPSHADOW"
-Field 'description' changed for native 'SetTextDropshadow':
+Old content length: 5335619
+New content length: 5335775
+Field 'description' changed for native 'ClearAllBlipRoutes':
+Old: "Clears all active blip routes that have been set with [`SetBlipRoute`](#\\_0x3E160C90)."
+New: "Clears all active blip routes that have been set with [`SetBlipRoute`](#\\_0x4F7D8A9BFB0B43E9)."
+Field 'cname' changed for native 'GetAllVehicles':
+Old: "_GET_ALL_VEHICLES"
+New: "GET_ALL_VEHICLES"
+Field 'description' changed for native 'GetAllVehicles':
 Old: ""
-New: "distance - shadow distance in pixels, both horizontal and vertical\nr, g, b, a - color"
-Field 'docs_url' changed for native 'SetTextDropshadow':
-Old: "https://docs.fivem.net/natives/?_0x1CA3E9EAC9D93E5E"
-New: "https://docs.fivem.net/natives/?_0x465C84BC39F1C351"
-Field 'hash' changed for native 'SetTextDropshadow':
-Old: "0x1CA3E9EAC9D93E5E"
-New: "0x465C84BC39F1C351"
-Field 'jhash' changed for native 'SetTextDropshadow':
-Old: "0xE2A11511"
-New: "0xE6587517"
-Field 'params' changed for native 'SetTextDropshadow':
-Old: []
-New: [{"name":"distance","type":"int"},{"name":"r","type":"int"},{"name":"g","type":"int"},{"name":"b","type":"int"},{"name":"a","type":"int"}]
+New: "For FiveM, use [`GET_GAME_POOL`](#\\_0x2B9D4F50)."
+Field 'description' changed for native 'GetScreenResolution':
+Old: "Hardcoded to always return 1280x720. Use [`_GET_ACTIVE_SCREEN_RESOLUTION`](?\\_0x873C9F3104101DD3) to retrieve the correct screen resolution."
+New: "Hardcoded to always return 1280x720. Use [`_GET_ACTIVE_SCREEN_RESOLUTION`](#\\_0x873C9F3104101DD3) to retrieve the correct screen resolution."
+Field 'description' changed for native 'N_0xfec9a3b1820f3331':
+Old: "Native to check whether [`_SET_PED_SCUBA_GEAR_VARIATION`](#\\_0x36c6984c3ed0c911) is enabled/actived."
+New: "Native to check whether [`_SET_PED_SCUBA_GEAR_VARIATION`](#\\_0x36C6984C3ED0C911) is enabled/actived."
+Field 'docs_url' changed for native 'GetCutsceneEndTime':
+Old: "https://docs.fivem.net/natives/?_0x011883f41211432a"
+New: "https://docs.fivem.net/natives/?_0x971D7B15BCDBEF99"
+Field 'hash' changed for native 'GetCutsceneEndTime':
+Old: "0x011883f41211432a"
+New: "0x971D7B15BCDBEF99"
+Field 'description' changed for native 'SetPedHeadBlendData':
+Old: "For more info please refer to [this](https://gtaforums.com/topic/858970-all-gtao-face-ids-pedset-ped-head-blend-data-explained) topic.\n\n**Other information:**\n\nIDs start at zero and go Male Non-DLC, Female Non-DLC, Male DLC, and Female DLC.</br>\n\nThis native function is often called prior to calling natives such as:\n\n*   [`SetPedHairColor`](#\\_0xBB43F090)\n*   [`SetPedHeadOverlayColor`](#\\_0x78935A27)\n*   [`SetPedHeadOverlay`](#\\_0xD28DBA90)\n*   [`SetPedFaceFeature`](#\\_0x6C8D4458)"
+New: "For more info please refer to [this](https://gtaforums.com/topic/858970-all-gtao-face-ids-pedset-ped-head-blend-data-explained) topic.\n\n**Other information:**\n\nIDs start at zero and go Male Non-DLC, Female Non-DLC, Male DLC, and Female DLC.</br>\n\nThis native function is often called prior to calling natives such as:\n\n*   [`SetPedHairColor`](#\\_0xA23FE32C)\n*   [`SetPedHeadOverlayColor`](#\\_0x78935A27)\n*   [`SetPedHeadOverlay`](#\\_0xD28DBA90)\n*   [`SetPedFaceFeature`](#\\_0x6C8D4458)"
+Field 'description' changed for native 'EnableControlAction':
+Old: "```\ncontrol values and meaning: github.com/crosire/scripthookvdotnet/blob/dev_v3/source/scripting/Control.cs  \nand  \nhttps://docs.fivem.net/game-references/controls/\n0, 1 and 2 used in the scripts.  \nControl values from the decompiled scripts:   \n0,1,2,3,4,5,6,8,9,10,11,14,15,16,17,19,21,22,24,25,26,30,31,32,33,34,35,36,  \n37,44,46,47,59,60,65,68,69,70,71,72,73,74,75,76,79,80,81,82,86,95,98,99,100  \n,101,114,140,141,143,172,173,174,175,176,177,178,179,180,181,187,188,189,19  \n0,195,196,197,198,199,201,202,203,204,205,206,207,208,209,210,217,218,219,2  \n20,221,225,228,229,230,231,234,235,236,237,238,239,240,241,242,245,246,257,  \n261,262,263,264,286,287,288,289,337,338,339,340,341,342,343  \nINPUTGROUP_MOVE  \nINPUTGROUP_LOOK  \nINPUTGROUP_WHEEL  \nINPUTGROUP_CELLPHONE_NAVIGATE  \nINPUTGROUP_CELLPHONE_NAVIGATE_UD  \nINPUTGROUP_CELLPHONE_NAVIGATE_LR  \nINPUTGROUP_FRONTEND_DPAD_ALL  \nINPUTGROUP_FRONTEND_DPAD_UD  \nINPUTGROUP_FRONTEND_DPAD_LR  \nINPUTGROUP_FRONTEND_LSTICK_ALL  \nINPUTGROUP_FRONTEND_RSTICK_ALL  \nINPUTGROUP_FRONTEND_GENERIC_UD  \nINPUTGROUP_FRONTEND_GENERIC_LR  \nINPUTGROUP_FRONTEND_GENERIC_ALL  \nINPUTGROUP_FRONTEND_BUMPERS  \nINPUTGROUP_FRONTEND_TRIGGERS  \nINPUTGROUP_FRONTEND_STICKS  \nINPUTGROUP_SCRIPT_DPAD_ALL  \nINPUTGROUP_SCRIPT_DPAD_UD  \nINPUTGROUP_SCRIPT_DPAD_LR  \nINPUTGROUP_SCRIPT_LSTICK_ALL  \nINPUTGROUP_SCRIPT_RSTICK_ALL  \nINPUTGROUP_SCRIPT_BUMPERS  \nINPUTGROUP_SCRIPT_TRIGGERS  \nINPUTGROUP_WEAPON_WHEEL_CYCLE  \nINPUTGROUP_FLY  \nINPUTGROUP_SUB  \nINPUTGROUP_VEH_MOVE_ALL  \nINPUTGROUP_CURSOR  \nINPUTGROUP_CURSOR_SCROLL  \nINPUTGROUP_SNIPER_ZOOM_SECONDARY  \nINPUTGROUP_VEH_HYDRAULICS_CONTROL  \nTook those in IDA Pro.Not sure in which order they go  \n```"
+New: "```\ncontrol values and meaning: https://github.com/scripthookvdotnet/scripthookvdotnet/blob/47f8bb02a50e27d4bb982f43a78091feac59b21c/source/scripting_v3/GTA/Control.cs\nand  \nhttps://docs.fivem.net/game-references/controls/\n0, 1 and 2 used in the scripts.  \nControl values from the decompiled scripts:   \n0,1,2,3,4,5,6,8,9,10,11,14,15,16,17,19,21,22,24,25,26,30,31,32,33,34,35,36,  \n37,44,46,47,59,60,65,68,69,70,71,72,73,74,75,76,79,80,81,82,86,95,98,99,100  \n,101,114,140,141,143,172,173,174,175,176,177,178,179,180,181,187,188,189,19  \n0,195,196,197,198,199,201,202,203,204,205,206,207,208,209,210,217,218,219,2  \n20,221,225,228,229,230,231,234,235,236,237,238,239,240,241,242,245,246,257,  \n261,262,263,264,286,287,288,289,337,338,339,340,341,342,343  \nINPUTGROUP_MOVE  \nINPUTGROUP_LOOK  \nINPUTGROUP_WHEEL  \nINPUTGROUP_CELLPHONE_NAVIGATE  \nINPUTGROUP_CELLPHONE_NAVIGATE_UD  \nINPUTGROUP_CELLPHONE_NAVIGATE_LR  \nINPUTGROUP_FRONTEND_DPAD_ALL  \nINPUTGROUP_FRONTEND_DPAD_UD  \nINPUTGROUP_FRONTEND_DPAD_LR  \nINPUTGROUP_FRONTEND_LSTICK_ALL  \nINPUTGROUP_FRONTEND_RSTICK_ALL  \nINPUTGROUP_FRONTEND_GENERIC_UD  \nINPUTGROUP_FRONTEND_GENERIC_LR  \nINPUTGROUP_FRONTEND_GENERIC_ALL  \nINPUTGROUP_FRONTEND_BUMPERS  \nINPUTGROUP_FRONTEND_TRIGGERS  \nINPUTGROUP_FRONTEND_STICKS  \nINPUTGROUP_SCRIPT_DPAD_ALL  \nINPUTGROUP_SCRIPT_DPAD_UD  \nINPUTGROUP_SCRIPT_DPAD_LR  \nINPUTGROUP_SCRIPT_LSTICK_ALL  \nINPUTGROUP_SCRIPT_RSTICK_ALL  \nINPUTGROUP_SCRIPT_BUMPERS  \nINPUTGROUP_SCRIPT_TRIGGERS  \nINPUTGROUP_WEAPON_WHEEL_CYCLE  \nINPUTGROUP_FLY  \nINPUTGROUP_SUB  \nINPUTGROUP_VEH_MOVE_ALL  \nINPUTGROUP_CURSOR  \nINPUTGROUP_CURSOR_SCROLL  \nINPUTGROUP_SNIPER_ZOOM_SECONDARY  \nINPUTGROUP_VEH_HYDRAULICS_CONTROL  \nTook those in IDA Pro.Not sure in which order they go  \n```"
+Field 'description' changed for native 'GetLiveryName':
+Old: "```\nSecond Param = LiveryIndex  \nexample   \nint count = VEHICLE::GET_VEHICLE_LIVERY_COUNT(veh);  \nfor (int i = 0; i < count; i++)    \n\t{  \nchar* LiveryName = VEHICLE::GET_LIVERY_NAME(veh, i);  \n\t}  \nthis example will work fine to fetch all names   \nfor example for Sanchez we get   \nSANC_LV1  \nSANC_LV2  \nSANC_LV3  \nSANC_LV4  \nSANC_LV5  \nUse _GET_LABEL_TEXT, to get the localized livery name.  \n-----------  \nNOTE: You may need to set the vehicle's modKit to 0 by using this function: SET_VEHICLE_MOD_KIT() before getting the name, otherwise this native may return NULL.  \ndev-c.com/nativedb/func/info/1f2aa07f00b3217a  \n```"
+New: "```\nSecond Param = LiveryIndex  \nexample   \nint count = VEHICLE::GET_VEHICLE_LIVERY_COUNT(veh);  \nfor (int i = 0; i < count; i++)    \n\t{  \nchar* LiveryName = VEHICLE::GET_LIVERY_NAME(veh, i);  \n\t}  \nthis example will work fine to fetch all names   \nfor example for Sanchez we get   \nSANC_LV1  \nSANC_LV2  \nSANC_LV3  \nSANC_LV4  \nSANC_LV5  \nUse _GET_LABEL_TEXT, to get the localized livery name.  \n```\n\nNOTE: You may need to set the vehicle's modKit to 0 by using this function [SET_VEHICLE_MOD_KIT](#\\_0x1F2AA07F00B3217A) before getting the name, otherwise this native may return NULL."
 Checking changes for RDR3
 Old content length: 5174487
 New content length: 5174487
-GTA5: Native 'AppClearBlock' modifiée: client.return_type changé de '"zoulette"' à '"void"'
-GTA5: Nouvelle native ajoutée: client.SetTextDropShadow
-GTA5: Native 'SetTextDropshadow' modifiée: client.cname changé de '"SET_TEXT_DROP_SHADOW"' à '"SET_TEXT_DROPSHADOW"'
-GTA5: Native 'SetTextDropshadow' modifiée: client.description changé de '""' à '"distance - shadow distance in pixels, both horizontal and vertical\nr, g, b, a - color"'
-GTA5: Native 'SetTextDropshadow' modifiée: client.docs_url changé de '"https://docs.fivem.net/natives/?_0x1CA3E9EAC9D93E5E"' à '"https://docs.fivem.net/natives/?_0x465C84BC39F1C351"'
-GTA5: Native 'SetTextDropshadow' modifiée: client.hash changé de '"0x1CA3E9EAC9D93E5E"' à '"0x465C84BC39F1C351"'
-GTA5: Native 'SetTextDropshadow' modifiée: client.jhash changé de '"0xE2A11511"' à '"0xE6587517"'
-GTA5: Native 'SetTextDropshadow' modifiée: client.params changé de '[]' à '[{"name":"distance","type":"int"},{"name":"r","type":"int"},{"name":"g","type":"int"},{"name":"b","type":"int"},{"name":"a","type":"int"}]'
+GTA5: Native 'ClearAllBlipRoutes' modifiée: client.description changé de '"Clears all active blip routes that have been set with [`SetBlipRoute`](#\\_0x3E160C90)."' à '"Clears all active blip routes that have been set with [`SetBlipRoute`](#\\_0x4F7D8A9BFB0B43E9)."'
+GTA5: Native 'GetAllVehicles' modifiée: client.cname changé de '"_GET_ALL_VEHICLES"' à '"GET_ALL_VEHICLES"'
+GTA5: Native 'GetAllVehicles' modifiée: client.description changé de '""' à '"For FiveM, use [`GET_GAME_POOL`](#\\_0x2B9D4F50)."'
+GTA5: Nouvelle native ajoutée: client.IsAllowedIndependentCameraModes
+GTA5: Native 'GetScreenResolution' modifiée: client.description changé de '"Hardcoded to always return 1280x720. Use [`_GET_ACTIVE_SCREEN_RESOLUTION`](?\\_0x873C9F3104101DD3) to retrieve the correct screen resolution."' à '"Hardcoded to always return 1280x720. Use [`_GET_ACTIVE_SCREEN_RESOLUTION`](#\\_0x873C9F3104101DD3) to retrieve the correct screen resolution."'
+GTA5: Native 'N_0xfec9a3b1820f3331' modifiée: client.description changé de '"Native to check whether [`_SET_PED_SCUBA_GEAR_VARIATION`](#\\_0x36c6984c3ed0c911) is enabled/actived."' à '"Native to check whether [`_SET_PED_SCUBA_GEAR_VARIATION`](#\\_0x36C6984C3ED0C911) is enabled/actived."'
+GTA5: Native 'GetCutsceneEndTime' modifiée: client.docs_url changé de '"https://docs.fivem.net/natives/?_0x011883f41211432a"' à '"https://docs.fivem.net/natives/?_0x971D7B15BCDBEF99"'
+GTA5: Native 'GetCutsceneEndTime' modifiée: client.hash changé de '"0x011883f41211432a"' à '"0x971D7B15BCDBEF99"'
+GTA5: Native 'SetPedHeadBlendData' modifiée: client.description changé de '"For more info please refer to [this](https://gtaforums.com/topic/858970-all-gtao-face-ids-pedset-ped-head-blend-data-explained) topic.\n\n**Other information:**\n\nIDs start at zero and go Male Non-DLC, Female Non-DLC, Male DLC, and Female DLC.</br>\n\nThis native function is often called prior to calling natives such as:\n\n*   [`SetPedHairColor`](#\\_0xBB43F090)\n*   [`SetPedHeadOverlayColor`](#\\_0x78935A27)\n*   [`SetPedHeadOverlay`](#\\_0xD28DBA90)\n*   [`SetPedFaceFeature`](#\\_0x6C8D4458)"' à '"For more info please refer to [this](https://gtaforums.com/topic/858970-all-gtao-face-ids-pedset-ped-head-blend-data-explained) topic.\n\n**Other information:**\n\nIDs start at zero and go Male Non-DLC, Female Non-DLC, Male DLC, and Female DLC.</br>\n\nThis native function is often called prior to calling natives such as:\n\n*   [`SetPedHairColor`](#\\_0xA23FE32C)\n*   [`SetPedHeadOverlayColor`](#\\_0x78935A27)\n*   [`SetPedHeadOverlay`](#\\_0xD28DBA90)\n*   [`SetPedFaceFeature`](#\\_0x6C8D4458)"'
+GTA5: Native 'EnableControlAction' modifiée: client.description changé de '"```\ncontrol values and meaning: github.com/crosire/scripthookvdotnet/blob/dev_v3/source/scripting/Control.cs  \nand  \nhttps://docs.fivem.net/game-references/controls/\n0, 1 and 2 used in the scripts.  \nControl values from the decompiled scripts:   \n0,1,2,3,4,5,6,8,9,10,11,14,15,16,17,19,21,22,24,25,26,30,31,32,33,34,35,36,  \n37,44,46,47,59,60,65,68,69,70,71,72,73,74,75,76,79,80,81,82,86,95,98,99,100  \n,101,114,140,141,143,172,173,174,175,176,177,178,179,180,181,187,188,189,19  \n0,195,196,197,198,199,201,202,203,204,205,206,207,208,209,210,217,218,219,2  \n20,221,225,228,229,230,231,234,235,236,237,238,239,240,241,242,245,246,257,  \n261,262,263,264,286,287,288,289,337,338,339,340,341,342,343  \nINPUTGROUP_MOVE  \nINPUTGROUP_LOOK  \nINPUTGROUP_WHEEL  \nINPUTGROUP_CELLPHONE_NAVIGATE  \nINPUTGROUP_CELLPHONE_NAVIGATE_UD  \nINPUTGROUP_CELLPHONE_NAVIGATE_LR  \nINPUTGROUP_FRONTEND_DPAD_ALL  \nINPUTGROUP_FRONTEND_DPAD_UD  \nINPUTGROUP_FRONTEND_DPAD_LR  \nINPUTGROUP_FRONTEND_LSTICK_ALL  \nINPUTGROUP_FRONTEND_RSTICK_ALL  \nINPUTGROUP_FRONTEND_GENERIC_UD  \nINPUTGROUP_FRONTEND_GENERIC_LR  \nINPUTGROUP_FRONTEND_GENERIC_ALL  \nINPUTGROUP_FRONTEND_BUMPERS  \nINPUTGROUP_FRONTEND_TRIGGERS  \nINPUTGROUP_FRONTEND_STICKS  \nINPUTGROUP_SCRIPT_DPAD_ALL  \nINPUTGROUP_SCRIPT_DPAD_UD  \nINPUTGROUP_SCRIPT_DPAD_LR  \nINPUTGROUP_SCRIPT_LSTICK_ALL  \nINPUTGROUP_SCRIPT_RSTICK_ALL  \nINPUTGROUP_SCRIPT_BUMPERS  \nINPUTGROUP_SCRIPT_TRIGGERS  \nINPUTGROUP_WEAPON_WHEEL_CYCLE  \nINPUTGROUP_FLY  \nINPUTGROUP_SUB  \nINPUTGROUP_VEH_MOVE_ALL  \nINPUTGROUP_CURSOR  \nINPUTGROUP_CURSOR_SCROLL  \nINPUTGROUP_SNIPER_ZOOM_SECONDARY  \nINPUTGROUP_VEH_HYDRAULICS_CONTROL  \nTook those in IDA Pro.Not sure in which order they go  \n```"' à '"```\ncontrol values and meaning: https://github.com/scripthookvdotnet/scripthookvdotnet/blob/47f8bb02a50e27d4bb982f43a78091feac59b21c/source/scripting_v3/GTA/Control.cs\nand  \nhttps://docs.fivem.net/game-references/controls/\n0, 1 and 2 used in the scripts.  \nControl values from the decompiled scripts:   \n0,1,2,3,4,5,6,8,9,10,11,14,15,16,17,19,21,22,24,25,26,30,31,32,33,34,35,36,  \n37,44,46,47,59,60,65,68,69,70,71,72,73,74,75,76,79,80,81,82,86,95,98,99,100  \n,101,114,140,141,143,172,173,174,175,176,177,178,179,180,181,187,188,189,19  \n0,195,196,197,198,199,201,202,203,204,205,206,207,208,209,210,217,218,219,2  \n20,221,225,228,229,230,231,234,235,236,237,238,239,240,241,242,245,246,257,  \n261,262,263,264,286,287,288,289,337,338,339,340,341,342,343  \nINPUTGROUP_MOVE  \nINPUTGROUP_LOOK  \nINPUTGROUP_WHEEL  \nINPUTGROUP_CELLPHONE_NAVIGATE  \nINPUTGROUP_CELLPHONE_NAVIGATE_UD  \nINPUTGROUP_CELLPHONE_NAVIGATE_LR  \nINPUTGROUP_FRONTEND_DPAD_ALL  \nINPUTGROUP_FRONTEND_DPAD_UD  \nINPUTGROUP_FRONTEND_DPAD_LR  \nINPUTGROUP_FRONTEND_LSTICK_ALL  \nINPUTGROUP_FRONTEND_RSTICK_ALL  \nINPUTGROUP_FRONTEND_GENERIC_UD  \nINPUTGROUP_FRONTEND_GENERIC_LR  \nINPUTGROUP_FRONTEND_GENERIC_ALL  \nINPUTGROUP_FRONTEND_BUMPERS  \nINPUTGROUP_FRONTEND_TRIGGERS  \nINPUTGROUP_FRONTEND_STICKS  \nINPUTGROUP_SCRIPT_DPAD_ALL  \nINPUTGROUP_SCRIPT_DPAD_UD  \nINPUTGROUP_SCRIPT_DPAD_LR  \nINPUTGROUP_SCRIPT_LSTICK_ALL  \nINPUTGROUP_SCRIPT_RSTICK_ALL  \nINPUTGROUP_SCRIPT_BUMPERS  \nINPUTGROUP_SCRIPT_TRIGGERS  \nINPUTGROUP_WEAPON_WHEEL_CYCLE  \nINPUTGROUP_FLY  \nINPUTGROUP_SUB  \nINPUTGROUP_VEH_MOVE_ALL  \nINPUTGROUP_CURSOR  \nINPUTGROUP_CURSOR_SCROLL  \nINPUTGROUP_SNIPER_ZOOM_SECONDARY  \nINPUTGROUP_VEH_HYDRAULICS_CONTROL  \nTook those in IDA Pro.Not sure in which order they go  \n```"'
+GTA5: Nouvelle native ajoutée: client.IgnoreMenuPreferenceForBonnetCameraThisUpdate
+GTA5: Native 'GetLiveryName' modifiée: client.description changé de '"```\nSecond Param = LiveryIndex  \nexample   \nint count = VEHICLE::GET_VEHICLE_LIVERY_COUNT(veh);  \nfor (int i = 0; i < count; i++)    \n\t{  \nchar* LiveryName = VEHICLE::GET_LIVERY_NAME(veh, i);  \n\t}  \nthis example will work fine to fetch all names   \nfor example for Sanchez we get   \nSANC_LV1  \nSANC_LV2  \nSANC_LV3  \nSANC_LV4  \nSANC_LV5  \nUse _GET_LABEL_TEXT, to get the localized livery name.  \n-----------  \nNOTE: You may need to set the vehicle's modKit to 0 by using this function: SET_VEHICLE_MOD_KIT() before getting the name, otherwise this native may return NULL.  \ndev-c.com/nativedb/func/info/1f2aa07f00b3217a  \n```"' à '"```\nSecond Param = LiveryIndex  \nexample   \nint count = VEHICLE::GET_VEHICLE_LIVERY_COUNT(veh);  \nfor (int i = 0; i < count; i++)    \n\t{  \nchar* LiveryName = VEHICLE::GET_LIVERY_NAME(veh, i);  \n\t}  \nthis example will work fine to fetch all names   \nfor example for Sanchez we get   \nSANC_LV1  \nSANC_LV2  \nSANC_LV3  \nSANC_LV4  \nSANC_LV5  \nUse _GET_LABEL_TEXT, to get the localized livery name.  \n```\n\nNOTE: You may need to set the vehicle's modKit to 0 by using this function [SET_VEHICLE_MOD_KIT](#\\_0x1F2AA07F00B3217A) before getting the name, otherwise this native may return NULL."'
+GTA5: Native supprimée: client.N_0x7B8A361C1813FBEF
+GTA5: Native supprimée: client.N_0xEAF0FA793D05C592
 RDR3: Aucun changement
 Natives organized successfully! 15264 Total natives organized | 7283 Natives GTA5 | 7981 Natives RDR3
